@@ -1,0 +1,29 @@
+/* Estilos específicos para cadastro de atividade */
+form {
+  background-color: #f0f8ff;
+}
+
+h2 {
+  color: #007bff;
+  text-align: left;
+  margin-top: 0;
+}
+
+label {
+  color: #333;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  border-color: #007bff;
+}
+
+input[type="submit"] {
+  background-color: #007bff;
+  color: white;
+}
+
+input[type="submit"]:hover {
+  background-color: #0056b3;
+}
