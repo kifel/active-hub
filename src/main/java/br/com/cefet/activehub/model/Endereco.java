@@ -12,7 +12,7 @@ public class Endereco {
     private String cidade;
     private String numero;
     private String logradouro;
-    private String bairo;
+    private String bairro;
     private String complemento;
     private Cliente cliente;
 }
