@@ -13,7 +13,7 @@ import br.com.cefet.activehub.model.Endereco;
 public class EnderecoDAO extends GenericDAO<Endereco> {
 
     @Override
-    public void insert(Endereco endereco) throws SQLException {
+    public Endereco insert(Endereco endereco) throws SQLException {
         String sql = "INSERT INTO endereco (rua, numero, bairro, cidade, estado, cep) VALUES (?, ?, ?, ?, ?, ?)";
 
         Connection conn = null;
@@ -39,10 +39,11 @@ public class EnderecoDAO extends GenericDAO<Endereco> {
         } finally {
             closeConnection(conn, stmt, null);
         }
+        return endereco;
     }
 
     @Override
-    public void update(Endereco endereco) throws SQLException {
+    public Endereco update(Endereco endereco) throws SQLException {
         String sql = "UPDATE endereco SET rua = ?, numero = ?, bairro = ?, cidade = ?, estado = ?, cep = ? WHERE id = ?";
 
         Connection conn = null;
@@ -63,23 +64,26 @@ public class EnderecoDAO extends GenericDAO<Endereco> {
         } finally {
             closeConnection(conn, stmt, null);
         }
+        return endereco;
     }
 
     @Override
-    public void delete(Endereco endereco) throws SQLException {
+    public boolean delete(Endereco endereco) throws SQLException {
         String sql = "DELETE FROM endereco WHERE id = ?";
 
         Connection conn = null;
         PreparedStatement stmt = null;
+        int rowsAffected = 0;
 
         try {
             conn = MySQLConnection.getConnection();
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, endereco.getId());
-            stmt.executeUpdate();
+            rowsAffected = stmt.executeUpdate();
         } finally {
             closeConnection(conn, stmt, null);
         }
+        return rowsAffected > 0;
     }
 
     @Override

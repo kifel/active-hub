@@ -13,7 +13,7 @@ import br.com.cefet.activehub.model.ClienteAtividade;
 public class ClienteAtividadeDAO extends GenericDAO<ClienteAtividade> {
 
     @Override
-    public void insert(ClienteAtividade clienteAtividade) throws SQLException {
+    public ClienteAtividade insert(ClienteAtividade clienteAtividade) throws SQLException {
         String sql = "INSERT INTO cliente_atividade (cliente_id, atividade_id) VALUES (?, ?)";
 
         try (Connection conn = MySQLConnection.getConnection();
@@ -30,10 +30,11 @@ public class ClienteAtividadeDAO extends GenericDAO<ClienteAtividade> {
                 clienteAtividade.setId(rs.getInt(1));
             }
         }
+        return clienteAtividade;
     }
 
     @Override
-    public void update(ClienteAtividade clienteAtividade) throws SQLException {
+    public ClienteAtividade update(ClienteAtividade clienteAtividade) throws SQLException {
         String sql = "UPDATE cliente_atividade SET cliente_id = ?, atividade_id = ? WHERE id = ?";
 
         try (Connection conn = MySQLConnection.getConnection();
@@ -45,18 +46,21 @@ public class ClienteAtividadeDAO extends GenericDAO<ClienteAtividade> {
 
             stmt.executeUpdate();
         }
+        return clienteAtividade;
     }
 
     @Override
-    public void delete(ClienteAtividade clienteAtividade) throws SQLException {
+    public boolean delete(ClienteAtividade clienteAtividade) throws SQLException {
         String sql = "DELETE FROM cliente_atividade WHERE id = ?";
+        int rowsAffected = 0;
 
         try (Connection conn = MySQLConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, clienteAtividade.getId());
-            stmt.executeUpdate();
+            rowsAffected = stmt.executeUpdate();
         }
+        return rowsAffected > 0;
     }
 
     @Override
