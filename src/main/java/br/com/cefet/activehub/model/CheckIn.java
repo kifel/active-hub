@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 @Builder
 public class CheckIn {
-    private Integer id;
+    private int id;
     private Timestamp data;
     private Cliente cliente;
     private CheckEnum tipo;

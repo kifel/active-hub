@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 @Builder
 public class Cliente {
-    private Integer id;
+    private int id;
     private String nome;
     private String cpf;
     private String matricula;

@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 @Builder
 public class Atividade {
-    private Integer id;
+    private int id;
     private String nome;
     private BigDecimal valor;
     private List<ClienteAtividade> clientes; 

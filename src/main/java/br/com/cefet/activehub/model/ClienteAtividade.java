@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class ClienteAtividade {
-    private Integer id;
+    private int id;
     private Cliente cliente;
     private Atividade atividade;
 }
