@@ -14,7 +14,7 @@ import br.com.cefet.activehub.model.CheckIn;
 public class CheckInDAO extends GenericDAO<CheckIn> {
 
     @Override
-    public void insert(CheckIn checkIn) throws SQLException {
+    public CheckIn insert(CheckIn checkIn) throws SQLException {
         String sql = "INSERT INTO checkin (data, tipo, cliente_id) VALUES (?, ?, ?)";
 
         try (Connection conn = MySQLConnection.getConnection();
@@ -31,10 +31,11 @@ public class CheckInDAO extends GenericDAO<CheckIn> {
                 checkIn.setId(rs.getInt(1));
             }
         }
+        return checkIn;
     }
 
     @Override
-    public void update(CheckIn checkIn) throws SQLException {
+    public CheckIn update(CheckIn checkIn) throws SQLException {
         String sql = "UPDATE checkin SET data = ?, tipo = ?, cliente_id = ? WHERE id = ?";
 
         try (Connection conn = MySQLConnection.getConnection();
@@ -47,6 +48,7 @@ public class CheckInDAO extends GenericDAO<CheckIn> {
 
             stmt.executeUpdate();
         }
+        return checkIn;
     }
 
     @Override

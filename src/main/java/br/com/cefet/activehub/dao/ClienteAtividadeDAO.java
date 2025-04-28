@@ -13,7 +13,7 @@ import br.com.cefet.activehub.model.ClienteAtividade;
 public class ClienteAtividadeDAO extends GenericDAO<ClienteAtividade> {
 
     @Override
-    public void insert(ClienteAtividade clienteAtividade) throws SQLException {
+    public ClienteAtividade insert(ClienteAtividade clienteAtividade) throws SQLException {
         String sql = "INSERT INTO cliente_atividade (cliente_id, atividade_id) VALUES (?, ?)";
 
         try (Connection conn = MySQLConnection.getConnection();
@@ -30,10 +30,11 @@ public class ClienteAtividadeDAO extends GenericDAO<ClienteAtividade> {
                 clienteAtividade.setId(rs.getInt(1));
             }
         }
+        return clienteAtividade;
     }
 
     @Override
-    public void update(ClienteAtividade clienteAtividade) throws SQLException {
+    public ClienteAtividade update(ClienteAtividade clienteAtividade) throws SQLException {
         String sql = "UPDATE cliente_atividade SET cliente_id = ?, atividade_id = ? WHERE id = ?";
 
         try (Connection conn = MySQLConnection.getConnection();
@@ -45,6 +46,7 @@ public class ClienteAtividadeDAO extends GenericDAO<ClienteAtividade> {
 
             stmt.executeUpdate();
         }
+        return clienteAtividade;
     }
 
     @Override

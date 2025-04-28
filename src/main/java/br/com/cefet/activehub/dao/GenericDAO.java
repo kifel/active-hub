@@ -8,10 +8,10 @@ import java.util.List;
 
 public abstract class GenericDAO<T> {
     // Método para inserir um objeto no banco
-    public abstract void insert(T entity) throws SQLException;
+    public abstract T insert(T entity) throws SQLException;
 
     // Método para atualizar um objeto no banco
-    public abstract void update(T entity) throws SQLException;
+    public abstract T update(T entity) throws SQLException;
 
     // Método para deletar um objeto no banco
     public abstract void delete(T entity) throws SQLException;

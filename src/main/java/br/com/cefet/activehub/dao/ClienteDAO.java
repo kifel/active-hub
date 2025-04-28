@@ -17,7 +17,7 @@ import br.com.cefet.activehub.model.Endereco;
 public class ClienteDAO extends GenericDAO<Cliente> {
 
     @Override
-    public void insert(Cliente cliente) throws SQLException {
+    public Cliente insert(Cliente cliente) throws SQLException {
         String sql = "INSERT INTO cliente (nome, cpf, matricula, isActive, endereco_id) VALUES (?, ?, ?, ?, ?)";
 
         Connection conn = null;
@@ -42,10 +42,11 @@ public class ClienteDAO extends GenericDAO<Cliente> {
         } finally {
             closeConnection(conn, stmt, null);
         }
+        return cliente;
     }
 
     @Override
-    public void update(Cliente cliente) throws SQLException {
+    public Cliente update(Cliente cliente) throws SQLException {
         String sql = "UPDATE cliente SET nome = ?, cpf = ?, matricula = ?, isActive = ?, endereco_id = ? WHERE id = ?";
 
         Connection conn = null;
@@ -65,6 +66,7 @@ public class ClienteDAO extends GenericDAO<Cliente> {
         } finally {
             closeConnection(conn, stmt, null);
         }
+        return cliente;
     }
 
     @Override
