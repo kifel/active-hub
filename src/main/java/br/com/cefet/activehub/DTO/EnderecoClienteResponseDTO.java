@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class EnderecoClienteResponseDTO {
-    private Integer id;
+    private int id;
     private String cep;
     private String uf;
     private String cidade;

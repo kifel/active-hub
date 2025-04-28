@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 public class AtividadeClienteResponseDTO {
-    private Integer id;
+    private int id;
     private String nome;
     private BigDecimal valor;
     private PeriodoEnum periodo;
