@@ -53,15 +53,17 @@ public class AtividadeDAO extends GenericDAO<Atividade> {
     }
 
     @Override
-    public void delete(Atividade atividade) throws SQLException {
+    public boolean delete(Atividade atividade) throws SQLException {
         String sql = "DELETE FROM atividade WHERE id = ?";
+        int rowsAffected = 0;
 
         try (Connection conn = MySQLConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, atividade.getId());
-            stmt.executeUpdate();
+            rowsAffected = stmt.executeUpdate();
         }
+        return rowsAffected > 0;
     }
 
     @Override

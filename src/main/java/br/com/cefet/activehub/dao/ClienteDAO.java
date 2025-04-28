@@ -70,20 +70,22 @@ public class ClienteDAO extends GenericDAO<Cliente> {
     }
 
     @Override
-    public void delete(Cliente cliente) throws SQLException {
+    public boolean delete(Cliente cliente) throws SQLException {
         String sql = "DELETE FROM cliente WHERE id = ?";
 
         Connection conn = null;
         PreparedStatement stmt = null;
+        int rowsAffected = 0;
 
         try {
             conn = MySQLConnection.getConnection();
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, cliente.getId());
-            stmt.executeUpdate();
+            rowsAffected = stmt.executeUpdate();
         } finally {
             closeConnection(conn, stmt, null);
         }
+        return rowsAffected > 0;
     }
 
     @Override
@@ -223,5 +225,28 @@ public class ClienteDAO extends GenericDAO<Cliente> {
             closeConnection(conn, stmt, rs);
         }
         return clientes;
+    }
+
+    public boolean existsByCpf(String cpf) throws SQLException {
+        String sql = "SELECT 1 FROM cliente WHERE cpf = ? LIMIT 1";
+        boolean exists = false;
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = MySQLConnection.getConnection();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, cpf);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                exists = true;
+            }
+        } finally {
+            closeConnection(conn, stmt, rs);
+        }
+        return exists;
     }
 }

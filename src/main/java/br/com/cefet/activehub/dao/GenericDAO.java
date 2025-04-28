@@ -14,7 +14,7 @@ public abstract class GenericDAO<T> {
     public abstract T update(T entity) throws SQLException;
 
     // Método para deletar um objeto no banco
-    public abstract void delete(T entity) throws SQLException;
+    public abstract boolean delete(T entity) throws SQLException;
 
     // Método para buscar um objeto pelo seu ID
     public abstract T findById(int id) throws SQLException;

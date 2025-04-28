@@ -52,15 +52,18 @@ public class CheckInDAO extends GenericDAO<CheckIn> {
     }
 
     @Override
-    public void delete(CheckIn checkIn) throws SQLException {
+    public boolean delete(CheckIn checkIn) throws SQLException {
         String sql = "DELETE FROM checkin WHERE id = ?";
+        int rowsAffected = 0;
 
         try (Connection conn = MySQLConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, checkIn.getId());
             stmt.executeUpdate();
+            rowsAffected = stmt.executeUpdate();
         }
+        return rowsAffected > 0;
     }
 
     @Override

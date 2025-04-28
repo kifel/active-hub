@@ -68,20 +68,22 @@ public class EnderecoDAO extends GenericDAO<Endereco> {
     }
 
     @Override
-    public void delete(Endereco endereco) throws SQLException {
+    public boolean delete(Endereco endereco) throws SQLException {
         String sql = "DELETE FROM endereco WHERE id = ?";
 
         Connection conn = null;
         PreparedStatement stmt = null;
+        int rowsAffected = 0;
 
         try {
             conn = MySQLConnection.getConnection();
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, endereco.getId());
-            stmt.executeUpdate();
+            rowsAffected = stmt.executeUpdate();
         } finally {
             closeConnection(conn, stmt, null);
         }
+        return rowsAffected > 0;
     }
 
     @Override

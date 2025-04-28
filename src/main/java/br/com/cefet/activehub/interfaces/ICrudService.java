@@ -6,9 +6,9 @@ import java.util.List;
 public interface ICrudService<T, R> {
     R insert(T entity) throws SQLException;
 
-    R update(T entity) throws SQLException;
+    R update(int id, T entity) throws SQLException;
 
-    void delete(T entity) throws SQLException;
+    boolean delete(int id) throws SQLException;
 
     R findById(int id) throws SQLException;
 
