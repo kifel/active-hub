@@ -13,6 +13,9 @@ public class EnderecoClienteRequestDTO {
     private String bairro;
     private String complemento;
 
+    public EnderecoClienteRequestDTO() {
+    }
+
     public EnderecoClienteRequestDTO(Endereco endereco) {
         this.cep = endereco.getCep();
         this.uf = endereco.getUf();

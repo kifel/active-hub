@@ -1,0 +1,28 @@
+/* Estilo da página inicial (index.jsp) */
+.index-container {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.index-container h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.index-container .btn {
+  padding: 15px 25px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  background-color: #0056b3;
+  color: white;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.index-container .btn:hover {
+  background-color: #003d80;
+}
+
+.index-container .btn:active {
+  background-color: #003060;
+}
