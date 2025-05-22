@@ -57,6 +57,13 @@ public class ClienteAtividadeServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String methodOverride = req.getParameter("_method");
+
+        if ("DELETE".equalsIgnoreCase(methodOverride)) {
+            doDelete(req, resp);
+            return;
+        }
+
         try {
             int clienteId = Integer.parseInt(req.getParameter("clienteId"));
             int atividadeId = Integer.parseInt(req.getParameter("atividadeId"));
@@ -87,18 +94,21 @@ public class ClienteAtividadeServlet extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String idParam = req.getParameter("id");
-        if (idParam == null) {
-            resp.sendError(400, "Parâmetro id é obrigatório");
+        String clienteIdParam = req.getParameter("clienteId");
+        String atividadeIdParam = req.getParameter("atividadeId");
+        if (clienteIdParam == null || atividadeIdParam == null) {
+            resp.sendError(400, "Parâmetros clienteId e atividadeId são obrigatórios");
             return;
         }
 
         try {
-            int id = Integer.parseInt(idParam);
-            boolean excluido = clienteAtividadeService.delete(id);
+            int clienteId = Integer.parseInt(clienteIdParam);
+            int atividadeId = Integer.parseInt(atividadeIdParam);
+
+            boolean excluido = clienteAtividadeService.deleteByClienteAndAtividade(clienteId, atividadeId);
 
             if (excluido) {
-                resp.setStatus(204);
+                resp.sendRedirect(req.getContextPath() + "/clientes");
             } else {
                 resp.sendError(404, "Associação não encontrada para exclusão");
             }

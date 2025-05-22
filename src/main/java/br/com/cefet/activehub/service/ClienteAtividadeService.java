@@ -43,6 +43,10 @@ public class ClienteAtividadeService implements ICrudService<ClienteAtividadeReq
         return clienteAtividadeDAO.deleteById(id);
     }
 
+    public boolean deleteByClienteAndAtividade(int clienteId, int atividadeId) throws SQLException {
+        return clienteAtividadeDAO.deleteByClienteAndAtividade(clienteId, atividadeId);
+    }
+
     @Override
     public ClienteAtividadeResponseDTO update(int id, ClienteAtividadeRequestDTO entity) throws SQLException {
         // TODO Auto-generated method stub

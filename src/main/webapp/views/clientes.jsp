@@ -57,7 +57,10 @@
                 <td>${cliente.isActive ? "Ativo" : "Inativo"}</td>
                 <td>
                     <a href="${pageContext.request.contextPath}/clientes/${cliente.id}/edit" class="btn btn-edit">Editar</a>
-                    <button class="btn btn-delete" onclick="confirmDelete(${cliente.id})">Excluir</button>
+                    <form method="post" action="${pageContext.request.contextPath}/clientes/${cliente.id}" onsubmit="return confirm('Tem certeza que deseja excluir este cliente?');" style="display:inline;">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="submit" class="btn btn-delete">Excluir</button>
+                    </form>
                     <button class="btn btn-toggle" onclick="toggleStatus(${cliente.id})">${cliente.isActive ? 'Bloquear' : 'Desbloquear'}</button>
                     <a class="btn btn-toggle" href="${pageContext.request.contextPath}/clienteatividade?clienteId=${cliente.id}" class="btn btn-link">Adicionar Atividade</a>
                 </td>
@@ -70,7 +73,12 @@
                             <c:forEach var="ca" items="${cliente.atividades}">
                                 <li>
                                     ${ca.nome} - Valor: R$ ${ca.valor} - Período: ${ca.periodo}
-                                    <button class="btn btn-delete" onclick="confirmDeleteAtividade(${ca.id})">Excluir</button>
+                                    <form method="post" action="${pageContext.request.contextPath}/clienteatividade" onsubmit="return confirm('Tem certeza que deseja excluir esta atividade?');" style="display:inline;">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <input type="hidden" name="clienteId" value="${cliente.id}">
+                                        <input type="hidden" name="atividadeId" value="${ca.id}">
+                                        <button type="submit" class="btn btn-delete">Excluir</button>
+                                    </form>
                                 </li>
                             </c:forEach>
                         </ul>
@@ -100,36 +108,6 @@
     let confirmButton = document.getElementById('confirmAction');
     let cancelButton = document.getElementById('cancelAction');
     let currentAction = null;
-
-    function confirmDelete(id) {
-        currentAction = () => {
-            fetch(`${contextPath}/clientes/` + id, {
-                method: 'DELETE'
-            }).then(response => {
-                if (response.ok) {
-                    window.location.reload();
-                } else {
-                    alert('Erro ao excluir cliente ' + id);
-                }
-            }).catch(() => alert('Erro ao excluir cliente'));
-        };
-        modal.style.display = 'flex';
-    }
-
-    function confirmDeleteAtividade(atividadeId) {
-        currentAction = () => {
-            fetch(`${contextPath}/clienteatividade?id=` + atividadeId, {
-                method: 'DELETE'
-            }).then(response => {
-                if (response.ok || response.status === 204) {
-                    window.location.reload();
-                } else {
-                    alert('Erro ao excluir atividade ' + atividadeId);
-                }
-            }).catch(() => alert('Erro ao excluir atividade'));
-        };
-        modal.style.display = 'flex';
-    }
 
     function toggleStatus(id) {
         currentAction = () => { window.location.href = contextPath + `/clientes/` + id + `/toggle`; };

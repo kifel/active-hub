@@ -82,6 +82,13 @@ public class ClienteController extends HttpServlet {
             throws IOException, ServletException {
         String path = request.getPathInfo();
 
+        String methodOverride = request.getParameter("_method");
+
+        if ("DELETE".equalsIgnoreCase(methodOverride)) {
+            doDelete(request, response);
+            return;
+        }
+
         try {
             ClienteRequestDTO dto = buildClienteFromRequest(request);
 
@@ -112,7 +119,7 @@ public class ClienteController extends HttpServlet {
             if (path != null && path.matches("/\\d+")) {
                 int id = ServletUtils.extractIdFromPath(path);
                 clienteService.delete(id);
-                resp.setStatus(HttpServletResponse.SC_NO_CONTENT); // 204 No Content
+                resp.sendRedirect(req.getContextPath() + "/clientes");
             } else {
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
             }

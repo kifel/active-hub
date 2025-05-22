@@ -146,6 +146,25 @@ public class ClienteAtividadeDAO extends GenericDAO<ClienteAtividade> {
 
             stmt.setInt(1, id);
             rowsAffected = stmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return rowsAffected > 0;
+    }
+
+    public boolean deleteByClienteAndAtividade(int clienteId, int atividadeId) throws SQLException {
+        String sql = "DELETE FROM cliente_atividade WHERE cliente_id = ? AND atividade_id = ?";
+        int rowsAffected = 0;
+
+        try (Connection conn = MySQLConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, clienteId);
+            stmt.setInt(2, atividadeId);
+            rowsAffected = stmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return rowsAffected > 0;
