@@ -1,10 +1,15 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ page import="jakarta.servlet.http.HttpSession, br.com.cefet.activehub.model.Usuario" %>
-<html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+
 <head>
-    <title>Associar Atividade</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Hub - Página Inicial</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/global.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
 
   <style>
     body {
@@ -64,6 +69,7 @@
     }
   </style>
 </head>
+
 <body>
     <div class="header">
     <p class="usuario">
@@ -77,24 +83,11 @@
       <a href="${pageContext.request.contextPath}/index.jsp" class="btn-header btn-logout">Logout</a>
     </div>
   </div>
-    <div class="container content">
-        <h1>Associar Atividade ao Cliente</h1>
-
-        <form method="post" action="${pageContext.request.contextPath}/clienteatividade">
-            <input type="hidden" name="clienteId" value="${clienteId}" />
-
-            <label for="atividadeId">Escolha uma Atividade:</label>
-            <select name="atividadeId" required>
-                <c:forEach var="atividade" items="${atividades}">
-                    <option value="${atividade.id}">
-                        ${atividade.nome} - R$ ${atividade.valor} (${atividade.periodo})
-                    </option>
-                </c:forEach>
-            </select>
-
-            <button type="submit" class="btn btn-primary">Vincular</button>
-            <a href="${pageContext.request.contextPath}/clientes" class="btn btn-secondary">Cancelar</a>
-        </form>
+    <div class="index-container content">
+        <h1>Bem-vindo ao Active Hub!</h1>
+        <a href="${pageContext.request.contextPath}/clientes" class="btn">Ir para a Listagem de Clientes</a>
+        <a href="${pageContext.request.contextPath}/atividade" class="btn">Ir para a Listagem de Atividades</a>
     </div>
 </body>
+
 </html>

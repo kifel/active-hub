@@ -50,3 +50,11 @@ CREATE TABLE checkin (
     tipo ENUM('IN', 'OUT') NOT NULL,
     FOREIGN KEY (cliente_id) REFERENCES cliente(id) ON DELETE CASCADE
 );
+
+-- Tabela Usuario
+CREATE TABLE usuario (
+    id bigint PRIMARY KEY auto_increment,
+    nome VARCHAR(100) NOT NULL,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
