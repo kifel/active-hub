@@ -6,10 +6,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import br.com.cefet.activehub.DTO.AtividadeDTO;
 import br.com.cefet.activehub.enums.PeriodoEnum;
 import br.com.cefet.activehub.model.Atividade;
+import br.com.cefet.activehub.model.Cliente;
+import br.com.cefet.activehub.model.ClienteAtividade;
+import br.com.cefet.activehub.utils.AtividadeMapper;
 
 public class AtividadeDAO extends GenericDAO<Atividade> {
 
@@ -109,5 +116,68 @@ public class AtividadeDAO extends GenericDAO<Atividade> {
             }
         }
         return atividades;
+    }
+
+    public List<AtividadeDTO> findAllJson() throws SQLException {
+        String sql = """
+                    SELECT
+                        a.id AS atividade_id, a.nome AS atividade_nome, a.valor, a.periodo,
+                        ca.id AS cliente_atividade_id,
+                        c.id AS cliente_id, c.nome AS cliente_nome, c.cpf, c.matricula, c.is_active
+                    FROM atividade a
+                    LEFT JOIN cliente_atividade ca ON ca.atividade_id = a.id
+                    LEFT JOIN cliente c ON ca.cliente_id = c.id
+                """;
+
+        Map<Integer, Atividade> atividadeMap = new HashMap<>();
+
+        try (Connection conn = MySQLConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                int atividadeId = rs.getInt("atividade_id");
+
+                Atividade atividade = atividadeMap.computeIfAbsent(atividadeId, id -> {
+                    try {
+                        return Atividade.builder()
+                                .id(atividadeId)
+                                .nome(rs.getString("atividade_nome"))
+                                .valor(rs.getBigDecimal("valor"))
+                                .periodo(
+                                        rs.getString("periodo") != null ? PeriodoEnum.valueOf(rs.getString("periodo"))
+                                                : null)
+                                .clientes(new ArrayList<>())
+                                .build();
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+
+                int clienteAtividadeId = rs.getInt("cliente_atividade_id");
+                if (!rs.wasNull()) {
+                    Cliente cliente = Cliente.builder()
+                            .id(rs.getInt("cliente_id"))
+                            .nome(rs.getString("cliente_nome"))
+                            .cpf(rs.getString("cpf"))
+                            .matricula(rs.getString("matricula"))
+                            .isActive(rs.getObject("is_active") != null ? rs.getBoolean("is_active") : true)
+                            .build();
+
+                    ClienteAtividade clienteAtividade = ClienteAtividade.builder()
+                            .id(clienteAtividadeId)
+                            .cliente(cliente)
+                            .atividade(atividade)
+                            .build();
+
+                    atividade.getClientes().add(clienteAtividade);
+                }
+            }
+        }
+
+        // Agora converte a coleção de Atividade para DTO usando o Mapper
+        return atividadeMap.values().stream()
+                .map(AtividadeMapper::toDTO)
+                .collect(Collectors.toList());
     }
 }
