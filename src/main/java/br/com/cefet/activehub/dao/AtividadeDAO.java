@@ -7,11 +7,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import br.com.cefet.activehub.DTO.AtividadeDTO;
+import br.com.cefet.activehub.DTO.ClienteDTO;
 import br.com.cefet.activehub.enums.PeriodoEnum;
 import br.com.cefet.activehub.model.Atividade;
 import br.com.cefet.activehub.model.Cliente;
@@ -179,5 +181,54 @@ public class AtividadeDAO extends GenericDAO<Atividade> {
         return atividadeMap.values().stream()
                 .map(AtividadeMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    public List<AtividadeDTO> findByNameJson(String nome) throws SQLException {
+        String sql = "SELECT " +
+                "  a.id AS atividade_id, a.nome AS atividade_nome, a.valor, a.periodo, " +
+                "  ca.id AS cliente_atividade_id, " +
+                "  c.id AS cliente_id, c.nome AS cliente_nome, c.cpf, c.matricula, c.is_active " +
+                "FROM atividade a " +
+                "LEFT JOIN cliente_atividade ca ON ca.atividade_id = a.id " +
+                "LEFT JOIN cliente c ON ca.cliente_id = c.id " +
+                "WHERE a.nome LIKE ? " +
+                "ORDER BY a.id";
+
+        Map<Integer, AtividadeDTO> atividadesMap = new LinkedHashMap<>();
+
+        try (Connection conn = MySQLConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, "%" + nome + "%");
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int atividadeId = rs.getInt("atividade_id");
+                    AtividadeDTO atividade = atividadesMap.get(atividadeId);
+                    if (atividade == null) {
+                        atividade = AtividadeDTO.builder()
+                                .id(atividadeId)
+                                .nome(rs.getString("atividade_nome"))
+                                .valor(rs.getBigDecimal("valor"))
+                                .periodo(PeriodoEnum.valueOf(rs.getString("periodo")))
+                                .clientes(new ArrayList<>())
+                                .build();
+                        atividadesMap.put(atividadeId, atividade);
+                    }
+
+                    int clienteId = rs.getInt("cliente_id");
+                    if (clienteId > 0) { // tem cliente associado
+                        ClienteDTO cliente = ClienteDTO.builder()
+                                .id(clienteId)
+                                .nome(rs.getString("cliente_nome"))
+                                .cpf(rs.getString("cpf"))
+                                .matricula(rs.getString("matricula"))
+                                .build();
+                        atividade.getClientes().add(cliente);
+                    }
+                }
+            }
+        }
+
+        return new ArrayList<>(atividadesMap.values());
     }
 }

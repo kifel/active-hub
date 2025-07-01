@@ -27,12 +27,19 @@ public class AtividadeJsonController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+         String nomeFiltro = request.getParameter("nome"); // pode ser null
 
         AtividadeDAO atividadeDao = new AtividadeDAO();
         List<AtividadeDTO> atividades = null;
         try {
-            atividades = atividadeDao.findAllJson();
-            System.out.println(atividades);
+            System.out.println("ant filtro");
+            if (nomeFiltro != null && !nomeFiltro.isBlank()) {
+                 System.out.println("filtro");
+                atividades = atividadeDao.findByNameJson(nomeFiltro.trim());
+            } else {
+                System.out.println("Sem filtro");
+                atividades = atividadeDao.findAllJson();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

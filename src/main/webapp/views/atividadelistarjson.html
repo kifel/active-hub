@@ -169,6 +169,10 @@
 </head>
 <body>
   <h1>Lista de Atividades</h1>
+  <div style="margin-bottom:20px; width:90%; max-width:960px; display:flex; justify-content:flex-start; align-items:center; gap:10px;">
+    <label for="filtro-nome" style="font-weight:700; font-size:1rem; color:#1f2937;">Filtrar por nome:</label>
+    <input type="text" id="filtro-nome" placeholder="Digite o nome da atividade" style="flex-grow:1; padding:8px 12px; font-size:1rem; border-radius:8px; border:1px solid #ccc;" />
+  </div>
   <table id="atividade-tabela" aria-label="Tabela com lista de atividades e clientes">
     <thead>
       <tr>
@@ -185,9 +189,14 @@
   </table>
 
   <script>
-    async function carregarAtividades() {
+    async function carregarAtividades(nomeFiltro = '') {
       try {
-        const resposta = await fetch('/activehub/atividadejson');
+        let url = '/activehub/atividadejson';
+        if (nomeFiltro.trim() !== '') {
+          url += '?nome=' + encodeURIComponent(nomeFiltro.trim());
+        }
+        
+         const resposta = await fetch(url);
         if (!resposta.ok) {
           throw new Error('Erro ao buscar atividade: ' + resposta.status);
         }
@@ -263,7 +272,13 @@
       }
     }
 
-    window.onload = carregarAtividades;
+    window.onload = () => {
+      carregarAtividades();
+      document.querySelector('#filtro-nome').addEventListener('input', function () {
+        const valor = this.value;
+        carregarAtividades(valor);
+      });
+    };
   </script>
 </body>
 </html>
