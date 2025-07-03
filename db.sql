@@ -56,5 +56,7 @@ CREATE TABLE usuario (
     id bigint PRIMARY KEY auto_increment,
     nome VARCHAR(100) NOT NULL,
     username VARCHAR(50) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL
+    password VARCHAR(255) NOT NULL,
+    cor_fundo VARCHAR(20),
+    cor_fonte VARCHAR(20)
 );

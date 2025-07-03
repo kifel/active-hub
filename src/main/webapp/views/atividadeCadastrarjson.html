@@ -10,14 +10,12 @@
     }
     body {
       margin: 0;
-      background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 20px;
-      color: #111827;
     }
     .container {
       background: #fff;
@@ -208,6 +206,30 @@
         messageDiv.classList.add('error');
       }
     });
+
+    function getCookie(nome) {
+      const cookies = document.cookie.split(';');
+      for (let c of cookies) {
+        const [chave, valor] = c.trim().split('=');
+        if (chave === nome) {
+          return decodeURIComponent(valor);
+        }
+      }
+      return null;
+    }
+
+    window.onload = () => {
+       // Aplica as cores do cookie
+      const corFonte = getCookie('corFonte');
+      const corFundo = getCookie('corFundo');
+
+      if (corFonte) {
+        document.body.style.color = corFonte;
+      }
+      if (corFundo) {
+        document.body.style.backgroundColor = corFundo;
+      }
+    };
   </script>
 </body>
 </html>

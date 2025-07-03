@@ -25,13 +25,21 @@ public class UsuarioController extends HttpServlet {
         String loginTxt = request.getParameter("login");
         String nomeTxt = request.getParameter("nome");
         String senhaTxt = request.getParameter("senha");
+        String corFundo = request.getParameter("corFundo");
+        String corFonte = request.getParameter("corFonte");
         String msg = null;
 
         // Criptografar a Senha
         String senhaHash = BCrypt.hashpw(senhaTxt, BCrypt.gensalt());
 
         // Instanciar um Login
-        Usuario usuario = Usuario.builder().nome(nomeTxt).username(loginTxt).password(senhaHash).build();
+        Usuario usuario = Usuario.builder()
+                .nome(nomeTxt)
+                .username(loginTxt)
+                .password(senhaHash)
+                .corFundo(corFundo)
+                .corFonte(corFonte)
+                .build();
 
         // Salvando um usuario do BD
         UsuarioDAO uDao = new UsuarioDAO();

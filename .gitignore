@@ -1,5 +1,6 @@
 # Ignorar a pasta .vscode
 .vscode/
+.idea/
 
 # Compiled class file
 *.class

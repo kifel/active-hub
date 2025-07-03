@@ -272,7 +272,28 @@
       }
     }
 
+    function getCookie(nome) {
+      const cookies = document.cookie.split(';');
+      for (let c of cookies) {
+        const [chave, valor] = c.trim().split('=');
+        if (chave === nome) {
+          return decodeURIComponent(valor);
+        }
+      }
+      return null;
+    }
+
     window.onload = () => {
+       // Aplica as cores do cookie
+      const corFonte = getCookie('corFonte');
+      const corFundo = getCookie('corFundo');
+
+      if (corFonte) {
+        document.body.style.color = corFonte;
+      }
+      if (corFundo) {
+        document.body.style.backgroundColor = corFundo;
+      }
       carregarAtividades();
       document.querySelector('#filtro-nome').addEventListener('input', function () {
         const valor = this.value;

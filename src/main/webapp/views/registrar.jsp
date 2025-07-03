@@ -146,6 +146,13 @@
       padding: 2rem;
       margin-top: 1rem;
     }
+    input[type="color"] {
+      padding: 0.3rem;
+      height: 3rem;
+      border-radius: 0.75rem;
+      border: 1px solid #d1d5db;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -155,6 +162,13 @@
       <input type="text" name="nome" placeholder="Nome" required />
       <input type="text" name="login" placeholder="Login" required />
       <input type="password" name="senha" placeholder="Senha" required />
+
+      <label style="text-align:left; font-size: 0.95rem;">Cor de fundo:</label>
+      <input type="color" name="corFundo" value="#ffffff" />
+
+      <label style="text-align:left; font-size: 0.95rem;">Cor da fonte:</label>
+      <input type="color" name="corFonte" value="#000000" />
+
       <button type="submit">Cadastrar</button>
     </form>
     <a href="${pageContext.request.contextPath}/index.jsp">Voltar</a>

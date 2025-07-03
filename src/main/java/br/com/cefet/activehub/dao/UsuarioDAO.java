@@ -13,7 +13,8 @@ public class UsuarioDAO extends GenericDAO<Usuario> {
 
     @Override
     public Usuario insert(Usuario entity) throws SQLException {
-        String sql = "insert into usuario(nome,username, password) values(?,?,?)";
+        String sql = "insert into usuario(nome,username, password, cor_fundo, cor_fonte) values(?,?,?,?,?)";
+
         Connection conn = null;
         PreparedStatement stmt = null;
 
@@ -24,6 +25,8 @@ public class UsuarioDAO extends GenericDAO<Usuario> {
             stmt.setString(1, entity.getNome());
             stmt.setString(2, entity.getUsername());
             stmt.setString(3, entity.getPassword());
+            stmt.setString(4, entity.getCorFundo());
+            stmt.setString(5, entity.getCorFonte());
             stmt.execute();
             stmt.close();
         } finally {
@@ -48,6 +51,8 @@ public class UsuarioDAO extends GenericDAO<Usuario> {
                         .nome(rs.getString("nome"))
                         .username(rs.getString("username"))
                         .password(rs.getString("password"))
+                        .corFundo(rs.getString("cor_fundo"))
+                        .corFonte(rs.getString("cor_fonte"))
                         .build();
             }
 

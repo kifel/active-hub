@@ -10,4 +10,6 @@ public class Usuario {
     private String nome;
     private String username;
     private String password;
+    private String corFundo;
+    private String corFonte;
 }

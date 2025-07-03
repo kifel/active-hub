@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.UUID;
 
+import jakarta.servlet.http.*;
 import org.mindrot.jbcrypt.BCrypt;
 
 import br.com.cefet.activehub.dao.UsuarioDAO;
@@ -11,10 +12,6 @@ import br.com.cefet.activehub.model.Usuario;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/login")
 public class LoginController extends HttpServlet {
@@ -52,6 +49,20 @@ public class LoginController extends HttpServlet {
             request.getRequestDispatcher("/index.jsp").forward(request, response);
             return;
         }
+
+        Cookie cookieFundo = new Cookie("corFundo", usuario.getCorFundo());
+        Cookie cookieFonte = new Cookie("corFonte", usuario.getCorFonte());
+
+        // Duração dos cookies: 7 dias (em segundos)
+        cookieFundo.setMaxAge(7 * 24 * 60 * 60);
+        cookieFonte.setMaxAge(7 * 24 * 60 * 60);
+
+        // Tornar os cookies acessíveis em todo o sistema
+        cookieFundo.setPath("/");
+        cookieFonte.setPath("/");
+
+        response.addCookie(cookieFundo);
+        response.addCookie(cookieFonte);
 
         // Login válido
         HttpSession session = request.getSession();
